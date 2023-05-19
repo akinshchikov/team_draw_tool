@@ -94,14 +94,19 @@ def make_team_draw(
 
     player_count: int = players.shape[0]
 
-    if configuration['upper_size_fix']:
-        min_team_size: int = configuration['team_size']
-        max_team_size: int = configuration['team_size'] + 1
-        team_count: int = int(np.floor(player_count / configuration['team_size']))
+    if 'team_count' in configuration:
+        min_team_size: int = int(np.floor(player_count / configuration['team_count']))
+        max_team_size: int = int(np.ceil(player_count / configuration['team_count']))
+        team_count: int = configuration['team_count']
     else:
-        min_team_size = configuration['team_size'] - 1
-        max_team_size = configuration['team_size']
-        team_count = int(np.ceil(player_count / configuration['team_size']))
+        if configuration['upper_size_fix']:
+            min_team_size = configuration['team_size']
+            max_team_size = configuration['team_size'] + 1
+            team_count = int(np.floor(player_count / configuration['team_size']))
+        else:
+            min_team_size = configuration['team_size'] - 1
+            max_team_size = configuration['team_size']
+            team_count = int(np.ceil(player_count / configuration['team_size']))
 
     team_draw: list[list[int]] = add_next_player(
         next_player_index = 0,
